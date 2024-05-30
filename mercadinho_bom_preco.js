@@ -110,6 +110,8 @@ class Sistema {
   }
 
   login(email, senha, tipoConta) {
+    console.log(email, senha, tipoConta);
+    //console.log(funcionarios[0].email, funcionarios[0].senha);
     if (tipoConta == "cliente") {
       for (let i = 0; i < clientes.length; i++) {
         if (clientes[i].email == email && clientes[i].senha == senha) {
@@ -125,6 +127,7 @@ class Sistema {
     } else if (tipoConta == "funcionario") {
       for (let i = 0; i < funcionarios.length; i++) {
         if (funcionarios[i].email == email && funcionarios[i].senha == senha) {
+          console.log("Checando..............\n");
           login_status = 1;
           login_conta = email;
           console.log("Login realizado com sucesso!\n");
@@ -353,11 +356,122 @@ class Sistema {
   }
 }
 
+const readline = require("readline");
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
 const sistema = new Sistema();
+
+function mostrarMenu() {
+  console.log(`
+    Escolha uma opção:
+    1. Cadastrar Cliente
+    2. Cadastrar Funcionario
+    3. Adicionar Produto
+    4. Fazer Login
+    5. Listar Produtos
+    6. Listar Clientes
+    7. Sair
+    `);
+}
+
+// Modificação a ser feita no menu:
+//     1. Cadastrar Cliente
+//     2. Fazer Login
+//     3. Listar Produtos
+//     4. Listar Clientes
+//     5. Ver meus Dados
+//     6. Modificar meus Dados
+//     7. Fazer Pedido
+//     8. Ver meus Pedidos
+//     9. Cancelar Pedido
+//     10. Setar Status Pedido
+//     11. Avaliar Pedido
+//     12. Visualizar Avaliações
+//     13. Adicionar Produto
+//     14. Excluir Produto
+//     15. Editar Produto
+
+function main() {
+  while (true) {
+    mostrarMenu();
+    const choice = prompt("Escolha uma opção: ");
+    let nome,
+      data_nascimento,
+      cpf,
+      senha,
+      validade,
+      preço,
+      quantidade_estoque,
+      descrição,
+      email,
+      tipoConta;
+    switch (choice) {
+      case "1":
+        nome = prompt("Nome: ");
+        data_nascimento = prompt("Data de nascimento: ");
+        cpf = prompt("CPF: ");
+        email = prompt("Email: ");
+        senha = prompt("Senha: ");
+        sistema.cadastro("cliente", nome, data_nascimento, cpf, email, senha);
+        break;
+      case "2":
+        nome = prompt("Nome: ");
+        cpf = prompt("CPF: ");
+        email = prompt("Email: ");
+        senha = prompt("Senha: ");
+        sistema.cadastro(
+          "funcionario",
+          nome,
+          (data_nascimento = null),
+          cpf,
+          email,
+          senha
+        );
+        break;
+      case "3":
+        validade = prompt("Validade: ");
+        preço = prompt("Preço: ");
+        quantidade_estoque = prompt("Quantidade em estoque: ");
+        nome = prompt("Nome: ");
+        descrição = prompt("Descrição: ");
+        sistema.adicionarProduto(
+          validade,
+          preço,
+          quantidade_estoque,
+          nome,
+          descrição
+        );
+        break;
+      case "4":
+        email = prompt("Email: ");
+        senha = prompt("Senha: ");
+        tipoConta = prompt("Tipo de conta: ");
+        sistema.login(email, senha, tipoConta);
+        break;
+      case "5":
+        sistema.verListaProdutos();
+        break;
+      case "6":
+        sistema.verListaClientes();
+        break;
+      case "7":
+        sistema.sairDoPrograma();
+        break;
+      default:
+        console.log("Opção inválida. Tente novamente.");
+    }
+  }
+}
+
+main();
 
 // Testes
 
-// sistema.cadastro("funcionario");
+// sistema.cadastro("funcionario", "Carol", "12/12/1999", "123456789", ');
 // sistema.login("carol@gmail.com", "123456789", "funcionario");
 // sistema.verMeusDados();
 // sistema.modificarMeusDados("nome", "Carol Silva");
